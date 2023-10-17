@@ -26,8 +26,9 @@ It does not have (and not plan to)
 Currently the following online stores are supported:
 
 * PlayStation 4 games (US & HK)
-* Nintendo Switch games US
-* Amazon US
+* Nintendo Switch ~games~ US
+* Amazon US (doesn't work)
+* Epic Game Store
 
 == Installation & usage
 
@@ -80,7 +81,7 @@ server at the port specified in the configuration. As always, it is
 recommended to run behind a reverse proxy. This provides the “API
 server”. I have this piece in my Nginx configuration:
 ----
-location /wishlist/api {
+location /api {
     proxy_pass http://localhost:3585/wishlist/api;
 }
 ----
@@ -154,3 +155,8 @@ the ID of “standard edition” is
 Ideally the program should be able to simply take a URL of the
 product, and automatically figure out the store and the ID(s). I am
 working on this. For now you will have to do this manually.
+
+=== Build and start
+
+docker-compose build
+docker-compose up

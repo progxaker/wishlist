@@ -1,0 +1,13 @@
+ # The URL “directory” where the web interface runs under. For example
+# if this is “wishlist”, the web interface will be at
+# https://your.domain/wishlist/. Empty if not set.
+url_prefix = "wishlist"
+# Listening port of the HTTP server
+port = 3585
+# Path of the database file
+db_file = "/var/lib/wishlist/wishlist.db"
+# The default price update interval
+update_interval_sec = 3600
+# Path of the Telegram controller. No Telegram notifications if
+# not set.
+#telegram_notifier = "/path/to/telegram-notify-bot"

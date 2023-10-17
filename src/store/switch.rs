@@ -29,25 +29,30 @@ impl Switch
 
     fn dataURL(&self, id: &str) -> String
     {
-        format!("https://www.nintendo.com/games/detail/{}/", id)
+        //format!("https://www.nintendo.com/games/detail/{}/", id)
+        format!("https://www.nintendo.com/us/store/products/{}/", id)
     }
 
     fn getTitleID(content: &str) -> Result<(&str, &str), Error>
     {
+        let (script_data_str, _, _) = utils::findSubStr(
+            content, "<script id=\"__NEXT_DATA__\" type=\"application/json\">", "</script>").ok_or(
+            rterr!("Failed to find store data1"))?;
+
         // Get position of ‘{’.
         let (store_data_str, _, _) = utils::findSubStr(
-            content, "Object.freeze({", "});").ok_or(
-            rterr!("Failed to find store data"))?;
+            script_data_str, "\"product\":{", "}").ok_or(
+            rterr!("Failed to find store data2"))?;
 
         let (title, _, _) = utils::findSubStr(
-            store_data_str, "title: \"", "\",")
-            .ok_or(rterr!("Failed to find store data"))?;
+            store_data_str, "\"name\":\"", "\",")
+            .ok_or(rterr!("Failed to find store data3"))?;
 
         // let title: String = serde_json::from_str(
         //     &store_data_str[title_json_begin..title_json_end+1]).map_err(
         //     |_| rterr!("Failed to parse title JSON"))?;
 
-        let (real_id, _, _) = utils::findSubStr(store_data_str, "nsuid: \"", "\",")
+        let (real_id, _, _) = utils::findSubStr(store_data_str, "\"nsuid\":\"", "\"")
             .ok_or(rterr!( "Failed to find real ID"))?;
         Ok((title, real_id))
     }

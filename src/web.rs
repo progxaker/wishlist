@@ -139,11 +139,11 @@ impl WebHandler
         let route_fe = warp::any().and(warp::fs::dir("frontend"));
 
         let rt = tokio::runtime::Runtime::new().unwrap();
-        info!("Running service at http://127.0.0.1:{}/{}", port,
+        info!("Running service at http://0.0.0.0:{}/{}", port,
               url_prefix.as_ref().unwrap_or(&String::new()));
         rt.block_on(
             warp::serve(withOptionalPrefix(url_prefix)
                         .and(route_list.or(route_history).or(route_fe)))
-                .try_bind(([127, 0, 0, 1], port)));
+                .try_bind(([0, 0, 0, 0], port)));
     }
 }
