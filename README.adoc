@@ -15,7 +15,7 @@ database. It has the following features:
 * It sends a Telegram message whenever there is a price drop.
 * It has a command line interface to manage the items.
 
-See https://darksair.org/wishlist/[my personal wishlist] for an
+See https://darksair.org/wishlist/[original author's wishlist] for an
 example.
 
 It does not have (and not plan to)
@@ -26,9 +26,10 @@ It does not have (and not plan to)
 Currently the following online stores are supported:
 
 * PlayStation 4 games (US & HK)
-* Nintendo Switch ~games~ US
+* Nintendo Switch [.line-through]#games# US
 * Amazon US (doesn't work)
 * Epic Game Store
+* Eva UA
 
 == Installation & usage
 
@@ -80,6 +81,7 @@ For the web interface, run `wishlist serve`. This starts an HTTP
 server at the port specified in the configuration. As always, it is
 recommended to run behind a reverse proxy. This provides the “API
 server”. I have this piece in my Nginx configuration:
+
 ----
 location /api {
     proxy_pass http://localhost:3585/wishlist/api;
@@ -152,11 +154,27 @@ https://store.playstation.com/en-us/product/UP0102-PPSA01556_00-VILLAGEXRE7COMPB
 the ID of “standard edition” is
 `UP0102-PPSA01556_00-VILLAGEFULLGAMEX`.
 
+For Eva UA, for example,
+`https://eva.ua/ua/pr20285/#/73278`,
+the ID is `pr20285-73278`. The command to add it is
+
+----
+wishlist add eva-ua pr20285-73278
+----
+
 Ideally the program should be able to simply take a URL of the
 product, and automatically figure out the store and the ID(s). I am
 working on this. For now you will have to do this manually.
 
 === Build and start
 
+----
 docker-compose build
 docker-compose up
+----
+
+or
+
+----
+docker-compose --build up
+----

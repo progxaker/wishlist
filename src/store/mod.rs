@@ -10,6 +10,7 @@ mod playstation;
 mod switch;
 mod amazon;
 mod epic;
+mod eva;
 
 /// An abstraction for the info one get when querying a store.
 #[derive(Debug, Deserialize, Serialize, Clone)]
@@ -82,6 +83,7 @@ store_enum!
     Switch(switch::Switch),
     Amazon(amazon::Amazon),
     Epic(epic::Epic),
+    Eva(eva::Eva),
 }
 
 impl Store
@@ -98,6 +100,7 @@ impl Store
                 switch::Switch::new(switch::Region::US))),
             "amazon-us" => Ok(Self::Amazon(amazon::Amazon::new())),
             "epic-us" => Ok(Self::Epic(epic::Epic::new(epic::Region::US))),
+            "eva-ua" => Ok(Self::Eva(eva::Eva::new())),
             _ => Err(rterr!("Invalid store: {}", store_name)),
         }
     }

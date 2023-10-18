@@ -41,7 +41,7 @@ RUN chmod 0544 /opt/entrypoint.sh
 COPY --from=build /project/target/release/wishlist /usr/local/bin/wishlist
 COPY etc/wishlist.toml /etc/wishlist.toml
 RUN mkdir -p /var/lib/wishlist/
-RUN /usr/local/bin/wishlist add switch-us super-mario-maker-2-switch
+RUN /usr/local/bin/wishlist add eva-ua pr229981-73263
 
 EXPOSE 3585
 
