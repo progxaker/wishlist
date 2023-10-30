@@ -13,9 +13,15 @@ pub struct Eva
 }
 
 #[derive(Deserialize)]
+struct StockBlock
+{
+    is_in_stock: bool,
+}
+
+#[derive(Deserialize)]
 struct SearchChild
 {
-    is_present: bool,
+    stock: StockBlock,
     name: String,
     #[serde(rename="externalAttr100050")]
     attribute: i64,
@@ -32,8 +38,7 @@ impl Eva
     fn dataURL(&self, id: &str) -> String
     {
         let search_api_url = "https://pwa-api.eva.ua/api/catalog/eva_catalog_default/product/_search";
-        // TODO: is_precense
-        let source_include_value = "configurable_children.externalAttr100050,configurable_children.price,configurable_children.name,configurable_children.is_present";
+        let source_include_value = "configurable_children.externalAttr100050,configurable_children.price,configurable_children.name,configurable_children.stock.is_in_stock";
         let request_value_raw = format!("{{\"query\":{{\"bool\":{{\"filter\":{{\"terms\":{{\"id\":[{}]}}}}}}}}}}", id);
         let request_value = encode(&request_value_raw);
         format!("{}?_source_include={}&request={}", search_api_url, source_include_value, request_value)
@@ -75,8 +80,8 @@ impl Eva
         let search_result = configurable_children.iter().find(|child|
             child.attribute == attribute_value.parse::<i64>().unwrap_or_default());
 
-        let (is_present, name, price) = match search_result {
-            Some(child) => (child.is_present, child.name.clone(), child.price),
+        let (is_in_stock, name, price) = match search_result {
+            Some(child) => (child.stock.is_in_stock, child.name.clone(), child.price),
             None => (false, String::new(), 0.0),
         };
 
@@ -87,7 +92,7 @@ impl Eva
         let mut item = ItemInfo::new(self.name, id);
         item.name = name.to_owned();
         item.price = (price * 100.0) as i64;
-        item.price_str = if is_present { format!("₴{}", price) } else { "Out of stock".to_string() };
+        item.price_str = if is_in_stock { format!("₴{}", price) } else { "Out of stock".to_string() };
         item.url = productUrl;
         Ok(item)
     }
